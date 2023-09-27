@@ -14,6 +14,7 @@ import org.junit.runners.Parameterized;
 import static org.junit.Assert.assertEquals;
 import java.util.Arrays;
 import java.util.Collection;
+import static org.apache.http.HttpStatus.*;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.Assert.assertNotNull;
@@ -61,7 +62,7 @@ public class ApiCreateOrderParametrizeTests {
                 .body(requestBody)
                 .when()
                 .post("/api/v1/orders");
-        assertEquals(201, responseCreateOrder.statusCode());
+        assertEquals(SC_CREATED, responseCreateOrder.statusCode());
         assertNotNull(responseCreateOrder.path("track"));
         track = responseCreateOrder.jsonPath().getInt("track");
     }

@@ -8,6 +8,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import random.RandomString;
+import static org.apache.http.HttpStatus.*;
 
 import java.util.Random;
 
@@ -24,16 +25,16 @@ public class ApiDeleteCourierTest {
         RestAssured.baseURI = BaseURL.getBaseURL();
 
         courier = new Courier(RandomString.generateRandomHexString(5), RandomString.generateRandomHexString(5), RandomString.generateRandomHexString(5));
-        courierAllMethods.create(courier);
-        Response responseLogin = courierAllMethods.login(courier);
+        courierAllMethods.createCourier(courier);
+        Response responseLogin = courierAllMethods.loginCourier(courier);
         id = responseLogin.path("id");
     }
 
     @Test
     @DisplayName("Check response /api/v1/courier/:id")
     public void deleteCourierResponseTest(){
-        Response responseDelete = courierAllMethods.delete(id);
-        assertEquals(200, responseDelete.statusCode());
+        Response responseDelete = courierAllMethods.deleteCourier(id);
+        assertEquals(SC_OK, responseDelete.statusCode());
         assertEquals(true, responseDelete.path("ok"));
     }
 
@@ -44,7 +45,7 @@ public class ApiDeleteCourierTest {
                 .header("Content-type", "application/json")
                 .when()
                 .delete("/api/v1/courier/");
-        assertEquals(400, response.statusCode());
+        assertEquals(SC_BAD_REQUEST, response.statusCode());
         assertEquals("Недостаточно данных для удаления курьера", response.path("message"));
     }
 
@@ -52,14 +53,14 @@ public class ApiDeleteCourierTest {
     @DisplayName("Check delete courier with invalid Id")
     public void deleteCourierWithInvalidId(){
         Random random = new Random();
-        Response responseDelete = courierAllMethods.delete(random.nextInt());
-        assertEquals(404, responseDelete.statusCode());
+        Response responseDelete = courierAllMethods.deleteCourier(random.nextInt());
+        assertEquals(SC_NOT_FOUND, responseDelete.statusCode());
         assertEquals("Курьера с таким id нет", responseDelete.path("message"));
     }
 
     @After
     public void deleteCourier() {
-        courierAllMethods.delete(id);
+        courierAllMethods.deleteCourier(id);
     }
 
 

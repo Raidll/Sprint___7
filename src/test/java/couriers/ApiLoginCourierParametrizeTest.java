@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import random.RandomString;
+import static org.apache.http.HttpStatus.*;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -42,9 +43,9 @@ public class ApiLoginCourierParametrizeTest {
         Courier courier = new Courier(RandomString.generateRandomHexString(5), RandomString.generateRandomHexString(5), RandomString.generateRandomHexString(5));
 
         return Arrays.asList(new Object[][]{
-                {courier.getLogin(), "", 400, "Недостаточно данных для входа"},
-                {"", courier.getPassword(), 400, "Недостаточно данных для входа"},
-                {"", "", 400, "Недостаточно данных для входа"}
+                {courier.getLogin(), "", SC_BAD_REQUEST, "Недостаточно данных для входа"},
+                {"", courier.getPassword(), SC_BAD_REQUEST, "Недостаточно данных для входа"},
+                {"", "", SC_BAD_REQUEST, "Недостаточно данных для входа"}
         });
     }
 

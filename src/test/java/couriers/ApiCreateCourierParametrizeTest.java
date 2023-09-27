@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import static io.restassured.RestAssured.given;
 import static org.junit.Assert.assertEquals;
+import static org.apache.http.HttpStatus.*;
 
 @RunWith(Parameterized.class)
 public class ApiCreateCourierParametrizeTest {
@@ -47,7 +48,7 @@ public class ApiCreateCourierParametrizeTest {
                 .body(requestBody)
                 .when()
                 .post("/api/v1/courier");
-        assertEquals(400, response.statusCode());
+        assertEquals(SC_BAD_REQUEST, response.statusCode());
         assertEquals("Недостаточно данных для создания учетной записи", response.path("message"));
 
 

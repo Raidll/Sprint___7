@@ -8,6 +8,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import random.RandomString;
+import static org.apache.http.HttpStatus.*;
 
 public class ApiLoginCourierTest {
     private CourierAllMethods courierAllMethods = new CourierAllMethods();
@@ -22,11 +23,11 @@ public class ApiLoginCourierTest {
     @DisplayName("Check response /api/v1/courier/login")
     public void loginCourier(){
         Courier courier = new Courier(RandomString.generateRandomHexString(5), RandomString.generateRandomHexString(5), RandomString.generateRandomHexString(5));
-        courierAllMethods.create(courier);
-        Response loginResponse = courierAllMethods.login(courier);
+        courierAllMethods.createCourier(courier);
+        Response loginResponse = courierAllMethods.loginCourier(courier);
         loginResponse.then()
                 .assertThat()
-                .statusCode(200);
+                .statusCode(SC_OK);
         id = loginResponse.path("id");
 
     }
@@ -35,14 +36,14 @@ public class ApiLoginCourierTest {
     @DisplayName("Check response with non-existent login and password /api/v1/courier/login")
     public void loginCourierWithNonExistentLoginAndPassword(){
         Courier courier = new Courier(RandomString.generateRandomHexString(5), RandomString.generateRandomHexString(5), RandomString.generateRandomHexString(5));
-        Response loginResponse = courierAllMethods.login(courier);
+        Response loginResponse = courierAllMethods.loginCourier(courier);
         loginResponse.then()
                 .assertThat()
-                .statusCode(404);
+                .statusCode(SC_NOT_FOUND);
     }
 
     @After
     public void deleteCourier() {
-        courierAllMethods.delete(id);
+        courierAllMethods.deleteCourier(id);
     }
 }
